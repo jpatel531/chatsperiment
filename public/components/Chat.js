@@ -13,7 +13,6 @@ var Chat = React.createClass({
   _onName: function(e){
     if (e.nativeEvent.keyCode != 13) return;
     var name = e.target.value;
-    console.log(name);
     this.setState({name: name});
     this.realtimeMessages = this.ReactivePusherArray("messages", name).sync().allowPush();
   },

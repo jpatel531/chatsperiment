@@ -24,7 +24,7 @@ ReactivePusher._RPA.prototype.sync = function(){
     var stateName = this.channel.name.replace("private-", "").replace("presence-", "")
     
     console.log(stateName)
-    var state = {}; state[stateName] = data;
+    var state = {}; state[stateName] = data || [];
     this.component.setState(state);
   }, this);
 
@@ -55,7 +55,7 @@ ReactivePusher._RPA.prototype.allowPush = function(options){
       var state = {}; state[stateName] = array;
       this.component.setState(state)
 
-      if (options.arrayDidAccept) options.arrayDidAccept(array);
+      if (options && options.arrayDidAccept) options.arrayDidAccept(array);
     }.bind(this));
   return this;  
 }
