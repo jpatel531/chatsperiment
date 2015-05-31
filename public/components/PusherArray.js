@@ -4,23 +4,20 @@ var ReactivePusher = {
   },
 
   ReactivePusherArray: function(channel, id, options){
-    console.log(id);
     var messagesChannel = this.pusher.subscribe('private-' + channel);
-    var uniqueChannel = this.pusher.subscribe('private-' + id);
-    return new this._RPA(messagesChannel, uniqueChannel, this, id);      
+    return new this._RPA(messagesChannel, this, id);      
   }
 }
 
-ReactivePusher._RPA = function(stateChannel, uniqueChannel, component, id){
+ReactivePusher._RPA = function(stateChannel, component, id){
    this.channel = stateChannel; 
-   this.uniqueChannel = uniqueChannel;
    this.component = component;
    this.id = id;
 }
 
 ReactivePusher._RPA.prototype.sync = function(){
-
-  this.uniqueChannel.bind('sync-response', function(data){
+  console.log(this.id);
+  this.channel.bind('client-sync-response-'+this.id, function(data){
     var stateName = this.channel.name.replace("private-", "").replace("presence-", "")
     
     console.log(stateName)
@@ -28,7 +25,7 @@ ReactivePusher._RPA.prototype.sync = function(){
     this.component.setState(state);
   }, this);
 
-  this.uniqueChannel.bind('pusher:subscription_succeeded', function(){
+  this.channel.bind('pusher:subscription_succeeded', function(){
     console.log(this.id);
     this.channel.trigger('client-sync-request', {id:this.id});
   }, this)

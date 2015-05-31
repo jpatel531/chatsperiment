@@ -60,8 +60,9 @@ func listenForEvents() {
 		var messages []Message
 		res, _ := r.Table("messages").Run(session)
 		res.All(&messages)
-		// messageChannel.Trigger("client-sync-response", "hello")
-		phttp.Trigger("private-"+idMap["id"], "sync-response", messages)
+
+		messageChannel.Trigger("client-sync-response-"+idMap["id"], messages)
+
 	})
 
 }
